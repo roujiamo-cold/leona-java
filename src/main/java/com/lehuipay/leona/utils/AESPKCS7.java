@@ -150,8 +150,8 @@ public class AESPKCS7 {
     public byte[] decryptWithIVBase64(String encryptedDataBase64, byte[] keyBytes, int ivLength) {
         byte[] encrypted = new Base64().decode(encryptedDataBase64); //先用base64解密
 
-        final byte[] iv = Util.subBytes(encrypted, 0, ivLength);
-        final byte[] encryptedData = Util.subBytes(encrypted, ivLength, encrypted.length - ivLength);
+        final byte[] iv = CommonUtil.subBytes(encrypted, 0, ivLength);
+        final byte[] encryptedData = CommonUtil.subBytes(encrypted, ivLength, encrypted.length - ivLength);
 
         try {
             return decrypt(encryptedData, keyBytes, iv);

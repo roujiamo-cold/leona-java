@@ -1,17 +1,17 @@
 package com.lehuipay.leona;
 
-import com.lehuipay.leona.utils.Util;
+import com.lehuipay.leona.utils.CommonUtil;
 
 public class Options {
 
     public Options(String agentID, String agentKey, String partnerPriKey, String lhPubKey, String encryptionLevel, String encryptionAccept, String secretKey) {
-        if (Util.NVLL(encryptionLevel).equals(Const.HEADER_X_LEHUI_ENCRYPTION_LEVEL_L1) &&
-                (Util.isEmpty(partnerPriKey) || Util.isEmpty(lhPubKey))) {
+        if (CommonUtil.NVLL(encryptionLevel).equals(Const.HEADER_X_LEHUI_ENCRYPTION_LEVEL_L1) &&
+                (CommonUtil.isEmpty(partnerPriKey) || CommonUtil.isEmpty(lhPubKey))) {
             throw new IllegalArgumentException("partnerPriKey and lhPubKey should not be empty when encryptionLevel == 'L1'");
         }
 
-        if (Util.NVLL(encryptionLevel).equals(Const.HEADER_X_LEHUI_ENCRYPTION_LEVEL_L2) &&
-                Util.isEmpty(secretKey)) {
+        if (CommonUtil.NVLL(encryptionLevel).equals(Const.HEADER_X_LEHUI_ENCRYPTION_LEVEL_L2) &&
+                CommonUtil.isEmpty(secretKey)) {
             throw new IllegalArgumentException("secretKey should not be empty when encryptionLevel == 'L2'");
         }
 

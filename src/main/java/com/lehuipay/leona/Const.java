@@ -26,6 +26,6 @@ public interface Const {
     String LEHUI_MICROPAY_URL   = LEHUI_SERVER_HOST + "/api/v3/payments/micropay";
     String LEHUI_JSPAY_URL      = LEHUI_SERVER_HOST + "/api/v3/payments/jspay";
     String LEHUI_GET_ORDER_URL  = LEHUI_SERVER_HOST + "/api/v3/payments/query";
-    String LEHUI_REFUND_URL     = LEHUI_SERVER_HOST + "/api/v3/refunds/query";
-    String LEHUI_GET_REFUND_URL = LEHUI_SERVER_HOST + "/api/v3/refunds";
+    String LEHUI_REFUND_URL     = LEHUI_SERVER_HOST + "/api/v3/refunds";
+    String LEHUI_GET_REFUND_URL = LEHUI_SERVER_HOST + "/api/v3/refunds/query";
 }

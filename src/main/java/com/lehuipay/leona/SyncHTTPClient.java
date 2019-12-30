@@ -9,7 +9,7 @@ import com.lehuipay.leona.interceptor.L1Interceptor;
 import com.lehuipay.leona.interceptor.L2Interceptor;
 import com.lehuipay.leona.interceptor.SignInterceptor;
 import com.lehuipay.leona.model.ErrorMessage;
-import com.lehuipay.leona.utils.Util;
+import com.lehuipay.leona.utils.CommonUtil;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.HttpResponseInterceptor;
@@ -49,14 +49,14 @@ public class SyncHTTPClient implements Closeable {
                 .addInterceptorLast((HttpRequestInterceptor) signInterceptor)
                 .addInterceptorFirst((HttpResponseInterceptor) signInterceptor);
 
-        if (!Util.isEmpty(options.getEncryptionLevel())) {
+        if (!CommonUtil.isEmpty(options.getEncryptionLevel())) {
             switch (options.getEncryptionLevel()) {
                 case Const.HEADER_X_LEHUI_ENCRYPTION_LEVEL_L1:
                     L1Interceptor l1 =
                             new L1Interceptor(
                                     new AESEncryptor(), new RSAEnctryptor(options.getPartnerPriKey(), options.getLhPubKey()), options.getEncryptionAccept());
                     httpClientBuilder.addInterceptorFirst((HttpRequestInterceptor) l1);
-                    if (!Util.equals(options.getEncryptionAccept(), Const.HEADER_X_LEHUI_ENCRYPTION_LEVEL_L0)) {
+                    if (!CommonUtil.equals(options.getEncryptionAccept(), Const.HEADER_X_LEHUI_ENCRYPTION_LEVEL_L0)) {
                         httpClientBuilder.addInterceptorLast((HttpResponseInterceptor) l1);
                     }
                     break;
@@ -65,7 +65,7 @@ public class SyncHTTPClient implements Closeable {
                             new L2Interceptor(
                                     new AESEncryptor(), options.getSecretKey(), options.getEncryptionAccept());
                     httpClientBuilder.addInterceptorFirst((HttpRequestInterceptor) l2);
-                    if (!Util.equals(options.getEncryptionAccept(), Const.HEADER_X_LEHUI_ENCRYPTION_LEVEL_L0)) {
+                    if (!CommonUtil.equals(options.getEncryptionAccept(), Const.HEADER_X_LEHUI_ENCRYPTION_LEVEL_L0)) {
                         httpClientBuilder.addInterceptorLast((HttpResponseInterceptor) l2);
                     }
                     break;
@@ -84,6 +84,7 @@ public class SyncHTTPClient implements Closeable {
         httpPost.setHeader("Accept", "*/*");
         httpPost.setHeader("Content-Type", "application/json; charset=UTF-8");
 
+        final String s = JSONObject.toJSONString(params);
         StringEntity entity = new StringEntity(JSONObject.toJSONString(params), CHARSET);
         httpPost.setEntity(entity);
 
@@ -93,7 +94,7 @@ public class SyncHTTPClient implements Closeable {
             StatusLine status = httpResp.getStatusLine();
             HttpEntity respEntity = httpResp.getEntity();
             if (respEntity != null) {
-                String jsonString = Util.inputStream2String(respEntity.getContent());
+                String jsonString = CommonUtil.inputStream2String(respEntity.getContent());
                 if (status.getStatusCode() == HttpStatus.SC_OK) {
                     return JSON.parseObject(jsonString, clazz);
                 } else {

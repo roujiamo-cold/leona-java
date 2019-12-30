@@ -4,17 +4,14 @@ import com.lehuipay.leona.contracts.Leona;
 import com.lehuipay.leona.exception.LeonaException;
 import com.lehuipay.leona.exception.LeonaRuntimeException;
 import com.lehuipay.leona.model.GetOrderRequest;
-import com.lehuipay.leona.model.GetOrderResponse;
 import com.lehuipay.leona.model.GetRefundRequest;
-import com.lehuipay.leona.model.GetRefundResponse;
 import com.lehuipay.leona.model.MicroPayRequest;
-import com.lehuipay.leona.model.MicroPayResponse;
+import com.lehuipay.leona.model.Payment;
 import com.lehuipay.leona.model.QRCodePayRequest;
 import com.lehuipay.leona.model.QRCodePayResponse;
+import com.lehuipay.leona.model.Refund;
 import com.lehuipay.leona.model.RefundRequest;
-import com.lehuipay.leona.model.RefundResponse;
-import com.lehuipay.leona.utils.Util;
-import org.apache.http.concurrent.FutureCallback;
+import com.lehuipay.leona.utils.CommonUtil;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -37,7 +34,7 @@ import java.io.IOException;
  *             final QRCodePayRequest req =
  *                     new QRCodePayRequest(merchantID, "2", "xxx", 1, null, null);
  *             final QRCodePayResponse resp = client.qrCodePay(req);
- *             // do somethong with resp
+ *             // do something with resp
  *             ...
  *         } catch (LeonaException e) {
  *             String type = e.getType();
@@ -49,7 +46,7 @@ import java.io.IOException;
  *      try {
  *             final GetOrderRequest req = new GetOrderRequest(merchantID, "xxx", null);
  *             final GetOrderResponse resp = client.getOrder(req);
- *             // do somethong with resp
+ *             // do something with resp
  *             ...
  *         } catch (LeonaException e) {
  *             String type = e.getType();
@@ -94,10 +91,10 @@ public class LeonaClient implements Leona, Closeable {
         private String secretKey;
 
         public Builder(String agentID, String agentKey) {
-            if (Util.isEmpty(agentID)) {
+            if (CommonUtil.isEmpty(agentID)) {
                 throw new IllegalArgumentException("agentID should not be empty");
             }
-            if (Util.isEmpty(agentKey)) {
+            if (CommonUtil.isEmpty(agentKey)) {
                 throw new IllegalArgumentException("agentKey should not be empty");
             }
             this.agentID = agentID;
@@ -105,7 +102,7 @@ public class LeonaClient implements Leona, Closeable {
         }
 
         public Builder setPartnerPriKey(String partnerPriKey) {
-            if (Util.isEmpty(partnerPriKey)) {
+            if (CommonUtil.isEmpty(partnerPriKey)) {
                 throw new IllegalArgumentException("partnerPriKey should not be empty");
             }
             this.partnerPriKey = partnerPriKey;
@@ -113,7 +110,7 @@ public class LeonaClient implements Leona, Closeable {
         }
 
         public Builder setLhPubKey(String lhPubKey) {
-            if (Util.isEmpty(lhPubKey)) {
+            if (CommonUtil.isEmpty(lhPubKey)) {
                 throw new IllegalArgumentException("lhPubKey should not be empty");
             }
             this.lhPubKey = lhPubKey;
@@ -121,7 +118,7 @@ public class LeonaClient implements Leona, Closeable {
         }
 
         public Builder setEncryptionLevel(String encryptionLevel) {
-            if (Util.isEmpty(encryptionLevel)) {
+            if (CommonUtil.isEmpty(encryptionLevel)) {
                 throw new IllegalArgumentException("encryptionLevel should not be empty");
             }
             this.encryptionLevel = encryptionLevel;
@@ -129,7 +126,7 @@ public class LeonaClient implements Leona, Closeable {
         }
 
         public Builder setEncryptionAccept(String encryptionAccept) {
-            if (Util.isEmpty(encryptionAccept)) {
+            if (CommonUtil.isEmpty(encryptionAccept)) {
                 throw new IllegalArgumentException("encryptionAccept should not be empty");
             }
             this.encryptionAccept = encryptionAccept;
@@ -137,7 +134,7 @@ public class LeonaClient implements Leona, Closeable {
         }
 
         public Builder setSecretKey(String secretKey) {
-            if (Util.isEmpty(secretKey)) {
+            if (CommonUtil.isEmpty(secretKey)) {
                 throw new IllegalArgumentException("secretKey should not be empty");
             }
             this.secretKey = secretKey;
@@ -164,10 +161,6 @@ public class LeonaClient implements Leona, Closeable {
         }
     }
 
-    public void qrCodePay(QRCodePayRequest req, FutureCallback<QRCodePayResponse> callback) throws LeonaException {
-//        httpClient.doPost(Const.LEHUI_QRCODE_URL, req, QRCodePayResponse.class, callback);
-    }
-
     /**
      * 刷卡交易
      *
@@ -175,16 +168,12 @@ public class LeonaClient implements Leona, Closeable {
      * @return
      * @throws Exception
      */
-    public MicroPayResponse microPay(MicroPayRequest req) throws LeonaException {
+    public Payment microPay(MicroPayRequest req) throws LeonaException {
         try {
-            return httpClient.doPost(Const.LEHUI_MICROPAY_URL, req, MicroPayResponse.class);
+            return httpClient.doPost(Const.LEHUI_MICROPAY_URL, req, Payment.class);
         } catch (LeonaRuntimeException e) {
             throw new LeonaException(e);
         }
-    }
-
-    public void microPay(MicroPayRequest req, FutureCallback<MicroPayResponse> callback) throws LeonaException {
-//        httpClient.doPost(Const.LEHUI_MICROPAY_URL, req, MicroPayResponse.class, callback);
     }
 
     /**
@@ -194,21 +183,13 @@ public class LeonaClient implements Leona, Closeable {
      * @return
      * @throws Exception
      */
-    public GetOrderResponse getOrder(GetOrderRequest req) throws LeonaException {
+    public Payment getOrder(GetOrderRequest req) throws LeonaException {
         try {
-            return httpClient.doPost(Const.LEHUI_GET_ORDER_URL, req, GetOrderResponse.class);
+            return httpClient.doPost(Const.LEHUI_GET_ORDER_URL, req, Payment.class);
         } catch (LeonaRuntimeException e) {
             throw new LeonaException(e);
         }
 
-    }
-
-    public void getOrder(GetOrderRequest req, FutureCallback<GetOrderResponse> callback) throws LeonaException {
-        try {
-//            httpClient.doPost(Const.LEHUI_GET_ORDER_URL, req, GetOrderResponse.class, callback);
-        } catch (LeonaRuntimeException e) {
-            throw new LeonaException(e);
-        }
     }
 
     /**
@@ -218,16 +199,12 @@ public class LeonaClient implements Leona, Closeable {
      * @return
      * @throws Exception
      */
-    public RefundResponse refund(RefundRequest req) throws LeonaException {
+    public Refund refund(RefundRequest req) throws LeonaException {
         try {
-            return httpClient.doPost(Const.LEHUI_REFUND_URL, req, RefundResponse.class);
+            return httpClient.doPost(Const.LEHUI_REFUND_URL, req, Refund.class);
         } catch (LeonaRuntimeException e) {
             throw new LeonaException(e);
         }
-    }
-
-    public void refund(RefundRequest req, FutureCallback<RefundResponse> callback) throws LeonaException {
-//        httpClient.doPost(Const.LEHUI_REFUND_URL, req, RefundResponse.class, callback);
     }
 
     /**
@@ -237,16 +214,12 @@ public class LeonaClient implements Leona, Closeable {
      * @return
      * @throws Exception
      */
-    public GetRefundResponse getRefund(GetRefundRequest req) throws LeonaException {
+    public Refund getRefund(GetRefundRequest req) throws LeonaException {
         try {
-            return httpClient.doPost(Const.LEHUI_GET_REFUND_URL, req, GetRefundResponse.class);
+            return httpClient.doPost(Const.LEHUI_GET_REFUND_URL, req, Refund.class);
         } catch (LeonaRuntimeException e) {
             throw new LeonaException(e);
         }
-    }
-
-    public void getRefund(GetRefundRequest req, FutureCallback<GetRefundResponse> callback) throws LeonaException {
-//        httpClient.doPost(Const.LEHUI_GET_REFUND_URL, req, GetRefundResponse.class, callback);
     }
 
     @Override

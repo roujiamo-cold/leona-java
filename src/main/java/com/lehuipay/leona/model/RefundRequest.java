@@ -1,18 +1,18 @@
 package com.lehuipay.leona.model;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.lehuipay.leona.utils.Util;
+import com.lehuipay.leona.utils.CommonUtil;
 
 public class RefundRequest {
 
     public RefundRequest(String merchantID, String orderNo, String transactionID, String refundNo, Integer amount) {
-        if (Util.isEmpty(merchantID)) {
+        if (CommonUtil.isEmpty(merchantID)) {
             throw new IllegalArgumentException("init com.lehuipay.leona.model.RefundRequest, merchantID should not be empty");
         }
-        if (Util.isEmpty(orderNo) && Util.isEmpty(transactionID)) {
+        if (CommonUtil.isEmpty(orderNo) && CommonUtil.isEmpty(transactionID)) {
             throw new IllegalArgumentException("init com.lehuipay.leona.model.RefundRequest, at least one of orderNo, transactionID");
         }
-        if (Util.isEmpty(refundNo)) {
+        if (CommonUtil.isEmpty(refundNo)) {
             throw new IllegalArgumentException("init com.lehuipay.leona.model.RefundRequest, refundNo should not be empty");
         }
         if (amount <= 0) {

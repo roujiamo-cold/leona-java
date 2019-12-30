@@ -5,7 +5,7 @@ import com.lehuipay.leona.contracts.AsymEncryptor;
 import com.lehuipay.leona.contracts.SymmEncryptor;
 import com.lehuipay.leona.exception.LeonaErrorCodeEnum;
 import com.lehuipay.leona.exception.LeonaRuntimeException;
-import com.lehuipay.leona.utils.Util;
+import com.lehuipay.leona.utils.CommonUtil;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpRequest;
@@ -37,11 +37,11 @@ public class L1Interceptor implements HttpRequestInterceptor, HttpResponseInterc
     public void process(HttpRequest httpRequest, HttpContext httpContext) throws IOException {
         HttpEntityEnclosingRequest entityRequest = (HttpEntityEnclosingRequest) httpRequest;
         HttpEntity entity = entityRequest.getEntity();
-        final String body = Util.inputStream2String(entity.getContent());
+        final String body = CommonUtil.inputStream2String(entity.getContent());
         /**
          * 加密requestBody并写回request
          */
-        final String aesKey = Util.randomStr(Const.SECRET_KEY_LENGTH);
+        final String aesKey = CommonUtil.randomStr(Const.SECRET_KEY_LENGTH);
         final String encrypted = symmEncryptor.encrypt(body.getBytes(), aesKey);
         entityRequest.setEntity(new StringEntity(encrypted, CHARSET));
 
@@ -52,16 +52,16 @@ public class L1Interceptor implements HttpRequestInterceptor, HttpResponseInterc
 
         httpRequest.setHeader(Const.HEADER_X_LEHUI_ENCRYPTION_LEVEL, Const.HEADER_X_LEHUI_ENCRYPTION_LEVEL_L1);
         httpRequest.setHeader(Const.HEADER_X_LEHUI_ENCRYPTION_ACCEPT, encryptionAccept);
-        httpRequest.setHeader(Const.HEADER_X_LEHUI_ENCRYPTION_KEY, Util.base64Encode(encryptAESKey));
-        httpRequest.setHeader(Const.HEADER_X_LEHUI_ENCRYPTION_SIGN, Util.base64Encode(encryptAESKeySignature));
+        httpRequest.setHeader(Const.HEADER_X_LEHUI_ENCRYPTION_KEY, CommonUtil.base64Encode(encryptAESKey));
+        httpRequest.setHeader(Const.HEADER_X_LEHUI_ENCRYPTION_SIGN, CommonUtil.base64Encode(encryptAESKeySignature));
     }
 
     @Override
     public void process(HttpResponse httpResponse, HttpContext httpContext) throws IOException {
         if (httpResponse.containsHeader(Const.HEADER_X_LEHUI_ENCRYPTION_KEY) &&
                 httpResponse.containsHeader(Const.HEADER_X_LEHUI_ENCRYPTION_SIGN)) {
-            final byte[] key = Util.base64Decode(httpResponse.getFirstHeader(Const.HEADER_X_LEHUI_ENCRYPTION_KEY).getValue());
-            final byte[] sign = Util.base64Decode(httpResponse.getFirstHeader(Const.HEADER_X_LEHUI_ENCRYPTION_SIGN).getValue());
+            final byte[] key = CommonUtil.base64Decode(httpResponse.getFirstHeader(Const.HEADER_X_LEHUI_ENCRYPTION_KEY).getValue());
+            final byte[] sign = CommonUtil.base64Decode(httpResponse.getFirstHeader(Const.HEADER_X_LEHUI_ENCRYPTION_SIGN).getValue());
 
             if (!asymEncryptor.verify(key, sign)) {
                 throw new LeonaRuntimeException(LeonaErrorCodeEnum.RSA_ENCRYPTION_VERIFY_FAIL);
@@ -70,7 +70,7 @@ public class L1Interceptor implements HttpRequestInterceptor, HttpResponseInterc
             final byte[] secretKey = asymEncryptor.priDecode(key);
 
             final HttpEntity entity = httpResponse.getEntity();
-            String body = Util.inputStream2String(entity.getContent());
+            String body = CommonUtil.inputStream2String(entity.getContent());
             final byte[] decryptBody = symmEncryptor.decrypt(body, secretKey);
             httpResponse.setEntity(new ByteArrayEntity(decryptBody));
         }

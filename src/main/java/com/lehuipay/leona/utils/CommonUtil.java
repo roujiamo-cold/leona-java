@@ -11,7 +11,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
-public class Util {
+public class CommonUtil {
 
     /**
      * trim string, include convert null to ""; if str1 is null, will return "";

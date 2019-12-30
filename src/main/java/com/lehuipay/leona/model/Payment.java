@@ -2,7 +2,7 @@ package com.lehuipay.leona.model;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
-public class MicroPayResponse {
+public class Payment {
 
     @JSONField(name="transaction_id")
     private String transactionID;
@@ -182,7 +182,7 @@ public class MicroPayResponse {
 
     @Override
     public String toString() {
-        return "MicroPayResponse{" +
+        return "Payment{" +
                 "transactionID='" + transactionID + '\'' +
                 ", orderNo='" + orderNo + '\'' +
                 ", upstreamOrderNo='" + upstreamOrderNo + '\'' +
@@ -202,5 +202,3 @@ public class MicroPayResponse {
                 '}';
     }
 }
-
-

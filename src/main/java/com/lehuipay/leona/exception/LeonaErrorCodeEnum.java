@@ -1,6 +1,6 @@
 package com.lehuipay.leona.exception;
 
-import com.lehuipay.leona.utils.Util;
+import com.lehuipay.leona.utils.CommonUtil;
 
 public enum LeonaErrorCodeEnum implements ErrorCode {
 
@@ -63,7 +63,7 @@ public enum LeonaErrorCodeEnum implements ErrorCode {
      */
     public static LeonaErrorCodeEnum getByCode(String code) {
         for (LeonaErrorCodeEnum value : LeonaErrorCodeEnum.values()) {
-            if (Util.NVLL(code).equals(value.getCode())) {
+            if (CommonUtil.NVLL(code).equals(value.getCode())) {
                 return value;
             }
         }
@@ -78,7 +78,7 @@ public enum LeonaErrorCodeEnum implements ErrorCode {
      */
     public static Boolean contains(String code) {
         for (LeonaErrorCodeEnum value : LeonaErrorCodeEnum.values()) {
-            if (Util.NVLL(code).equals(value.getCode())) {
+            if (CommonUtil.NVLL(code).equals(value.getCode())) {
                 return true;
             }
         }

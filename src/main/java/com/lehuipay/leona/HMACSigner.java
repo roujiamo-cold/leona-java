@@ -4,12 +4,12 @@ import com.lehuipay.leona.contracts.Signer;
 import com.lehuipay.leona.exception.LeonaErrorCodeEnum;
 import com.lehuipay.leona.exception.LeonaRuntimeException;
 import com.lehuipay.leona.utils.HMAC;
-import com.lehuipay.leona.utils.Util;
+import com.lehuipay.leona.utils.CommonUtil;
 
 public class HMACSigner implements Signer {
 
     public HMACSigner(String agentID, String agentKey) {
-        if (Util.isEmpty(agentID) || Util.isEmpty(agentKey)) {
+        if (CommonUtil.isEmpty(agentID) || CommonUtil.isEmpty(agentKey)) {
             throw new IllegalArgumentException("init com.lehuipay.leona.HMCASigner, agentID and agentKey should not be empty");
         }
         this.agentID = agentID;

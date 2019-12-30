@@ -1,25 +1,25 @@
 package com.lehuipay.leona.model;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.lehuipay.leona.utils.Util;
+import com.lehuipay.leona.utils.CommonUtil;
 
 public class MicroPayRequest {
 
     public MicroPayRequest(String merchantID, String terminalID, String orderNo, Integer amount, String authCode,
                            String notifyURL) {
-        if (Util.isEmpty(merchantID)) {
+        if (CommonUtil.isEmpty(merchantID)) {
             throw new IllegalArgumentException("init com.lehuipay.leona.model.MicroPayRequest, merchantID should not be empty");
         }
-        if (Util.isEmpty(terminalID)) {
+        if (CommonUtil.isEmpty(terminalID)) {
             throw new IllegalArgumentException("init com.lehuipay.leona.model.MicroPayRequest, terminalID should not be empty");
         }
-        if (Util.isEmpty(orderNo)) {
+        if (CommonUtil.isEmpty(orderNo)) {
             throw new IllegalArgumentException("init com.lehuipay.leona.model.MicroPayRequest, orderNo should not be empty");
         }
         if (amount <= 0) {
             throw new IllegalArgumentException("init com.lehuipay.leona.model.MicroPayRequest, amount should be greater than zero");
         }
-        if (Util.isEmpty(authCode)) {
+        if (CommonUtil.isEmpty(authCode)) {
             throw new IllegalArgumentException("init com.lehuipay.leona.model.MicroPayRequest, authCode should not be empty");
         }
 

@@ -2,7 +2,7 @@ package com.lehuipay.leona;
 
 import com.lehuipay.leona.contracts.SymmEncryptor;
 import com.lehuipay.leona.utils.AESPKCS7;
-import com.lehuipay.leona.utils.Util;
+import com.lehuipay.leona.utils.CommonUtil;
 
 public class AESEncryptor implements SymmEncryptor {
 
@@ -10,7 +10,7 @@ public class AESEncryptor implements SymmEncryptor {
 
     @Override
     public String encrypt(byte[] body, String secretKey) {
-        final String iv = Util.randomStr(Const.IV_LENGTH);
+        final String iv = CommonUtil.randomStr(Const.IV_LENGTH);
         return aes.encryptWithIVBase64(body, secretKey.getBytes(), iv.getBytes());
     }
 

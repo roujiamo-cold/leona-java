@@ -1,7 +1,5 @@
 package com.lehuipay.leona.exception;
 
-import com.lehuipay.leona.utils.Util;
-
 public class LeonaRuntimeException extends RuntimeException {
 
     private static final long serialVersionUID = -7864604160297181941L;

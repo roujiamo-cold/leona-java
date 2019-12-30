@@ -4,10 +4,9 @@ import com.lehuipay.leona.Const;
 import com.lehuipay.leona.contracts.Signer;
 import com.lehuipay.leona.exception.LeonaErrorCodeEnum;
 import com.lehuipay.leona.exception.LeonaRuntimeException;
-import com.lehuipay.leona.utils.Util;
+import com.lehuipay.leona.utils.CommonUtil;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
-import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.HttpResponse;
@@ -35,9 +34,9 @@ public class SignInterceptor implements HttpRequestInterceptor, HttpResponseInte
         // https://www.programcreek.com/java-api-examples/?api=org.apache.http.HttpEntity
         HttpEntityEnclosingRequest entityRequest = (HttpEntityEnclosingRequest) httpRequest;
         HttpEntity entity = entityRequest.getEntity();
-        final String body = Util.inputStream2String(entity.getContent());
+        final String body = CommonUtil.inputStream2String(entity.getContent());
 
-        String nonce = Util.randomStr(Const.NONCE_MIN_LENGTH, Const.NONCE_MAX_LENTH);
+        String nonce = CommonUtil.randomStr(Const.NONCE_MIN_LENGTH, Const.NONCE_MAX_LENTH);
         final String sign = signer.sign(body, nonce);
 
         httpRequest.setHeader(Const.HEADER_X_LEHUI_AGENTID, agentID);
@@ -53,7 +52,7 @@ public class SignInterceptor implements HttpRequestInterceptor, HttpResponseInte
             final String nonce = httpResponse.getFirstHeader(Const.HEADER_X_LEHUI_NONCE).getValue();
             final String signature = httpResponse.getFirstHeader(Const.HEADER_X_LEHUI_SIGNATURE).getValue();
             final HttpEntity entity = httpResponse.getEntity();
-            String body = Util.inputStream2String(entity.getContent());
+            String body = CommonUtil.inputStream2String(entity.getContent());
             httpResponse.setEntity(new StringEntity(body, CHARSET));
             if (!signer.verify(body, nonce, signature)) {
                 throw new LeonaRuntimeException(LeonaErrorCodeEnum.VERIFY_FAIL);

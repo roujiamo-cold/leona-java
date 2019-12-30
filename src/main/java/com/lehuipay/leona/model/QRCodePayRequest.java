@@ -1,16 +1,16 @@
 package com.lehuipay.leona.model;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.lehuipay.leona.utils.Util;
+import com.lehuipay.leona.utils.CommonUtil;
 
 public class QRCodePayRequest {
 
     public QRCodePayRequest(String merchantID, String terminalID, String orderNo, Integer amount,
                             String notifyURL, String callbackURL) {
-        if (Util.isEmpty(merchantID)) {
+        if (CommonUtil.isEmpty(merchantID)) {
             throw new IllegalArgumentException("init com.lehuipay.leona.model.QRCodePayRequest, merchantID should not be empty");
         }
-        if (Util.isEmpty(orderNo)) {
+        if (CommonUtil.isEmpty(orderNo)) {
             throw new IllegalArgumentException("init com.lehuipay.leona.model.QRCodePayRequest, merchantID should not be empty");
         }
         if (amount <= 0) {

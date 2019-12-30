@@ -2,7 +2,8 @@ package com.lehuipay.leona.model;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
-public class GetRefundResponse {
+public class Refund {
+
     @JSONField(name="merchant_id")
     private String merchantID;
 
@@ -22,7 +23,7 @@ public class GetRefundResponse {
     private String refundNo;
 
     @JSONField(name="total_amount")
-    private Integer totalAmount;
+    private String totalAmount;
 
     @JSONField(name="amount")
     private Integer amount;
@@ -99,11 +100,11 @@ public class GetRefundResponse {
         this.refundNo = refundNo;
     }
 
-    public Integer getTotalAmount() {
+    public String getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(Integer totalAmount) {
+    public void setTotalAmount(String totalAmount) {
         this.totalAmount = totalAmount;
     }
 
@@ -181,14 +182,14 @@ public class GetRefundResponse {
 
     @Override
     public String toString() {
-        return "GetRefundResponse{" +
+        return "Refund{" +
                 "merchantID='" + merchantID + '\'' +
                 ", terminalID='" + terminalID + '\'' +
                 ", refundID='" + refundID + '\'' +
                 ", orderNo='" + orderNo + '\'' +
                 ", transactionID='" + transactionID + '\'' +
                 ", refundNo='" + refundNo + '\'' +
-                ", totalAmount=" + totalAmount +
+                ", totalAmount='" + totalAmount + '\'' +
                 ", amount=" + amount +
                 ", appID='" + appID + '\'' +
                 ", buyerID='" + buyerID + '\'' +
